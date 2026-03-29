@@ -21,7 +21,6 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from api.views import health_check
 from django.conf import settings
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/health/", health_check),
@@ -31,7 +30,7 @@ urlpatterns = [
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger-ui",
     ),
-    path('', include('django_prometheus.urls')),
+    path("", include("django_prometheus.urls")),
     path("api/", include("api.urls")),
     path("o/", include("oauth2_provider.urls")),
     path("api/users/", include("users.urls")),  # Include user app URLs
@@ -39,6 +38,7 @@ urlpatterns = [
 
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
+        path("__debug__/", include(debug_toolbar.urls)),
     ] + urlpatterns
