@@ -9,6 +9,35 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: gopPythonDB
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d gopPythonDB"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DJANGO_SETTINGS_MODULE: config.settings
+      SECRET_KEY: ci-secret-key
+      DEBUG: "False"
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      DB_NAME: gopPythonDB
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      JWT_ACCESS_TOKEN_LIFETIME: 15m
+      JWT_REFRESH_TOKEN_LIFETIME: 7d
+      OAUTH2_ACCESS_TOKEN_EXPIRE_SECONDS: 3600
+      OAUTH2_AUTHORIZATION_CODE_EXPIRE_SECONDS: 300
+      OAUTH2_REFRESH_TOKEN_EXPIRE_SECONDS: 86400
 
     steps:
     - name: Checkout code
@@ -60,7 +89,5 @@ jobs:
     # UNIT TESTS (Django/DRF)
     # -------------------------
     - name: Run Tests
-      env:
-        DJANGO_SETTINGS_MODULE: your_project.settings
       run: |
         python manage.py test
