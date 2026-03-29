@@ -27,8 +27,8 @@ class OAuthTokenDocView(APIView):
     def post(self, request):
         return Response(
             {
-                "access_token": "sample_access_token",
-                "token_type": "Bearer",
+                "access_token": "sample_access_token",  # nosec B105
+                "token_type": "Bearer",  # nosec B105
                 "expires_in": 3600,
             }
         )
